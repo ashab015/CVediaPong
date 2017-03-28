@@ -17,9 +17,9 @@ public class NGUIPanelFade : MonoBehaviour {
         if (OnStart == true)
         {
             if (Widget == true)
-                GetComponent<UIPanel>().alpha = 0.0f;
-            else
                 GetComponent<UIWidget>().alpha = 0.0f;
+            else
+                GetComponent<UIPanel>().alpha = 0.0f;
             FadeIn();
         }
             
