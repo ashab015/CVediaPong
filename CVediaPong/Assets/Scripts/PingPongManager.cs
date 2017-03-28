@@ -6,7 +6,10 @@ using System.Collections.Generic;
 // like bouncing against the walls and the paddles of the wall / other player.
 public class PingPongManager : MonoBehaviour {
 
-    
+    // If checked the other players paddle will be controlled by the computer
+    public bool PlayAgainstComputer = false;
+    // Speed of the computer paddle
+    public float ComputerMovementSpeed = 2.0f;
     // Movement of the paddle when the player pressed the right or left key.
     public float PaddleMovementSpeed = 1.0f;
     // Velocity of the ball when you give the initial random vector velocity.
@@ -31,6 +34,7 @@ public class PingPongManager : MonoBehaviour {
     void Update ()
     {
 	
+        // Handles the arrow key paddle movement
         if (Input.GetKey(KeyCode.LeftArrow))
         {
             Paddle1.GetComponent<Rigidbody>().velocity += new Vector3(-1, 0, 0) * PaddleMovementSpeed;
@@ -40,6 +44,20 @@ public class PingPongManager : MonoBehaviour {
             Paddle1.GetComponent<Rigidbody>().velocity += new Vector3(1, 0, 0) * PaddleMovementSpeed;
         }
 
+        // If the PlayAgainstComputer is checked the computer just lerp the x position
+        if (PlayAgainstComputer == true)
+        {
+            // If the ball is past 0.0f on the on Y axis that means its getting close to hitting the computers side.
+            if (Ball.transform.position.y > 0.0f)
+            {
+                Paddle2.transform.position = Vector3.Lerp(Paddle2.transform.position, new Vector3(Ball.transform.position.x, Paddle2.transform.position.y, Paddle2.transform.position.z), Time.deltaTime * ComputerMovementSpeed);
+            }
+            // Make sure the computer paddle doesnt go beyond the screen
+            if (Paddle2.transform.position.x <= -53f)
+                Paddle2.transform.position = new Vector3(-53f, Paddle2.transform.position.y, Paddle2.transform.position.z);
+            if (Paddle2.transform.position.x >= 53f)
+                Paddle2.transform.position = new Vector3(53f, Paddle2.transform.position.y, Paddle2.transform.position.z);
+        }          
     }
 
     // Creates a random vector that can be scaled by the multiplied value.

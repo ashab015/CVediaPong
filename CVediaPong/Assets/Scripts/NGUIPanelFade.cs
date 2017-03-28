@@ -12,7 +12,7 @@ public class NGUIPanelFade : MonoBehaviour {
     // If checked this will fade the UIPanel or UIWidget in when the game starts.
     public bool OnStart = false;
 
-    private void Start()
+    void Start()
     {
         if (OnStart == true)
         {
