@@ -46,7 +46,6 @@ public class PingPongManager : MonoBehaviour {
     // Using Unity's default Random class generates zeros sometimes so were goint to use the System.Random
     Vector3 RandomVector3(float Multiplier)
     {
-        System.Random rnd = new System.Random();
         return new Vector3(GetRandomNumber(-1f, 1f) * Multiplier, GetRandomNumber(-1, 1) * Multiplier, GetRandomNumber(-1, 1) * Multiplier);
     }
     // Since System.Random doesn't have the actual random inbetween float we inplement on ourself.
@@ -70,7 +69,7 @@ public class PingPongManager : MonoBehaviour {
     public void PlayerLoose()
     {
         WinLooseWidget.FadeIn();
-        WinLooseMessage.text = "You loose!";
+        WinLooseMessage.text = "You Loose!";
         // Stop the ball
         Ball.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
     }
