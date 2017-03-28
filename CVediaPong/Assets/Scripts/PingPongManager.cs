@@ -13,6 +13,8 @@ public class PingPongManager : MonoBehaviour {
     public float VelocityMultiplier = 1.0f;
     public UILabel ScoreCounter;
     private int Score = 0;
+    public NGUIPanelFade WinLooseWidget;
+    public UILabel WinLooseMessage;
     public GameObject Paddle1;
     public GameObject Paddle2;
     public GameObject Ball;
@@ -62,5 +64,23 @@ public class PingPongManager : MonoBehaviour {
         Score += 1;
         ScoreCounter.text = "Score: " + Score.ToString();
     }
+
+    // If the player fails to block the ping pong ball 
+    // we set the UILabel and then fade in the UI element.
+    public void PlayerLoose()
+    {
+        WinLooseWidget.FadeIn();
+        WinLooseMessage.text = "You loose!";
+        // Stop the ball
+        Ball.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
+    }
+    public void PlayerWin()
+    {
+        WinLooseWidget.FadeIn();
+        WinLooseMessage.text = "You Win!";
+        // Stop the ball
+        Ball.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
+    }
+
 
 }
