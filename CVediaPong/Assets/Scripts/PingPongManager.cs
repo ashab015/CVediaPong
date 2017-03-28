@@ -41,10 +41,26 @@ public class PingPongManager : MonoBehaviour {
     }
 
     // Creates a random vector that can be scaled by the multiplied value.
+    // Using Unity's default Random class generates zeros sometimes so were goint to use the System.Random
     Vector3 RandomVector3(float Multiplier)
     {
-        return new Vector3(Random.RandomRange(-1, 1) * Multiplier, Random.RandomRange(-1, 1) * Multiplier, Random.RandomRange(-1, 1) * Multiplier);
+        System.Random rnd = new System.Random();
+        return new Vector3(GetRandomNumber(-1f, 1f) * Multiplier, GetRandomNumber(-1, 1) * Multiplier, GetRandomNumber(-1, 1) * Multiplier);
+    }
+    // Since System.Random doesn't have the actual random inbetween float we inplement on ourself.
+    public float GetRandomNumber(double minimum, double maximum)
+    {
+        System.Random random = new System.Random();
+        return (float)(random.NextDouble() * (maximum - minimum) + minimum);
     }
 
+
+    // If a collision between the paddle and the ball happens step the score of the player up one.
+    // This function is called by the ModularCollsionEvent component on the ball gameobject.
+    public void PingPongPaddleCollision()
+    {
+        Score += 1;
+        ScoreCounter.text = "Score: " + Score.ToString();
+    }
 
 }
