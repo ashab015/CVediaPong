@@ -28,8 +28,10 @@ public class PingPongManager : MonoBehaviour {
     {
         
         // Apply a random velocity to the ball at start so the ball flys in a random direction.
+        // For example were just going to send it in a predicted location so when you open the app
+        // You can actually know where is going to go and hit it.
         if (GameMode != 1)
-            Ball.GetComponent<Rigidbody>().velocity = RandomVector3(VelocityMultiplier);
+            Ball.GetComponent<Rigidbody>().velocity = new Vector3(10,10,0);
 
     }
 
