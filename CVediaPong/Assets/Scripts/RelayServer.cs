@@ -112,7 +112,7 @@ public class RelayServer : MonoBehaviour {
                 Actions.Add(delegate ()
                 {
                     string[] posdata = datarecieved[0].Split('|');
-                    PPM.Paddle2.transform.position = Vector3.Lerp(PPM.Paddle2.transform.position, new Vector3(float.Parse(posdata[0]), float.Parse(posdata[1]), float.Parse(posdata[2])), 6 * Time.deltaTime);
+                    PPM.Paddle2.transform.position = Vector3.Lerp(PPM.Paddle2.transform.position, new Vector3(float.Parse(posdata[0]), float.Parse(posdata[1]), float.Parse(posdata[2])), 6 * Time.fixedDeltaTime);
                 });
             }
         }

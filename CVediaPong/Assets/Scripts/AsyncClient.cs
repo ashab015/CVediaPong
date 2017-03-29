@@ -106,7 +106,7 @@ public class AsyncClient : MonoBehaviour {
                     Actions.Add(delegate ()
                     {
                         string[] posdata = datarecieved[0].Split('|');
-                        PPM.Ball.transform.position = Vector3.Lerp(PPM.Ball.transform.position, new Vector3(float.Parse(posdata[0]), float.Parse(posdata[1]), float.Parse(posdata[2])), 6 * Time.deltaTime);
+                        PPM.Ball.transform.position = Vector3.Lerp(PPM.Ball.transform.position, new Vector3(float.Parse(posdata[0]), float.Parse(posdata[1]), float.Parse(posdata[2])), 6 * Time.fixedDeltaTime);
                     });
                 }
                 if (datarecieved.Length > 1 && datarecieved[1] == "PADDLE")
@@ -114,7 +114,7 @@ public class AsyncClient : MonoBehaviour {
                     Actions.Add(delegate ()
                     {
                         string[] posdata = datarecieved[0].Split('|');
-                        PPM.Paddle1.transform.position = Vector3.Lerp(PPM.Paddle1.transform.position, new Vector3(float.Parse(posdata[0]), float.Parse(posdata[1]), float.Parse(posdata[2])), 6 * Time.deltaTime);
+                        PPM.Paddle1.transform.position = Vector3.Lerp(PPM.Paddle1.transform.position, new Vector3(float.Parse(posdata[0]), float.Parse(posdata[1]), float.Parse(posdata[2])), 6 * Time.fixedDeltaTime);
                     });
                 }
             }

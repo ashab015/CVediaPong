@@ -49,6 +49,15 @@ public class PingPongManager : MonoBehaviour {
             }
             else
             {
+                // Create a rigidbody on paddle 2
+                if (Paddle2.GetComponent<Rigidbody>() == null)
+                {
+                    Rigidbody rb = Paddle2.AddComponent<Rigidbody>();
+                    rb.drag = 6;
+                    rb.useGravity = false;
+                    rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+                    rb.freezeRotation = true;
+                }
                 Paddle2.GetComponent<Rigidbody>().velocity += new Vector3(-1, 0, 0) * PaddleMovementSpeed;
             }
         }
