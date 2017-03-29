@@ -209,6 +209,7 @@
     <Compile Include="Assets\Scripts\ModularCollisionEvent.cs" />
     <Compile Include="Assets\Scripts\NGUIPanelFade.cs" />
     <Compile Include="Assets\Scripts\PingPongManager.cs" />
+    <Compile Include="Assets\Scripts\RelayServer.cs" />
     <Compile Include="Assets\Scripts\SoundOnCollision.cs" />
   </ItemGroup>
   <ItemGroup>
