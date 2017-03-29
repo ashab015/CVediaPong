@@ -1,0 +1,16 @@
+ManifestFileVersion: 0
+CRC: 3250865026
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 589ac2aef72ba876cb17bc218a06a297
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 6759894fca659e2049f05064db45ce61
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+Assets:
+- Assets/Textures/SantaAssetBundle.png
+Dependencies: []
