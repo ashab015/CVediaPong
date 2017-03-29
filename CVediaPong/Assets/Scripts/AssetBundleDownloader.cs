@@ -1,0 +1,46 @@
+﻿using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+
+// Loads a texture from a asset bundle from the specified url
+public class AssetBundleDownloader : MonoBehaviour {
+
+    public bool Done = false;
+    public UITexture TextureBackground;
+    public string URL;
+
+    // Load the texture when the game starts
+    private void Start()
+    {
+        StartCoroutine(StartDownload());
+    }
+
+    // Uses WWW and the load asset functions to download the asset and extract the texture and apply it
+    // to the UITexture
+    IEnumerator StartDownload()
+    {
+        while (!Caching.ready)
+            yield return null;
+        // Start a download of the given URL
+        WWW www = WWW.LoadFromCacheOrDownload(URL, 1);
+        // Wait for download to complete
+        yield return www;
+        // Load and retrieve the AssetBundle
+        AssetBundle bundle = www.assetBundle;
+        // Load the object asynchronously
+        AssetBundleRequest request = bundle.LoadAssetAsync("SantaAssetBundle", typeof(Texture));
+        // Wait for completion
+        yield return request;
+        // Get the reference to the loaded object
+        Texture obj = request.asset as Texture;
+        TextureBackground.mainTexture = obj;
+        // Unload the AssetBundles compressed contents to conserve memory
+        bundle.Unload(false);
+        // Frees the memory from the web stream
+        www.Dispose();
+        Done = true;
+    }
+
+
+
+}

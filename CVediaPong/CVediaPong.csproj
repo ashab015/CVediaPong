@@ -206,7 +206,9 @@
     <Compile Include="Assets\NGUI\Scripts\UI\UITexture.cs" />
     <Compile Include="Assets\NGUI\Scripts\UI\UITooltip.cs" />
     <Compile Include="Assets\NGUI\Scripts\UI\UIViewport.cs" />
+    <Compile Include="Assets\Scripts\AssetBundleDownloader.cs" />
     <Compile Include="Assets\Scripts\AsyncClient.cs" />
+    <Compile Include="Assets\Scripts\CreateAssetBundles.cs" />
     <Compile Include="Assets\Scripts\ModularCollisionEvent.cs" />
     <Compile Include="Assets\Scripts\NGUIPanelFade.cs" />
     <Compile Include="Assets\Scripts\PingPongManager.cs" />
