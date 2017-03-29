@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2015
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CVediaPong.Plugins", "CVediaPong.Plugins.csproj", "{69EEFAD4-F2F6-A1AE-53F0-F6BEB73BD017}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CVediaPong", "CVediaPong.csproj", "{255EF27C-2A6A-1AA6-25AB-549485F5667D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CVediaPong.Editor", "CVediaPong.Editor.csproj", "{C496D5E9-24F8-38A2-0ED0-333C67914608}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{69EEFAD4-F2F6-A1AE-53F0-F6BEB73BD017}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69EEFAD4-F2F6-A1AE-53F0-F6BEB73BD017}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69EEFAD4-F2F6-A1AE-53F0-F6BEB73BD017}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69EEFAD4-F2F6-A1AE-53F0-F6BEB73BD017}.Release|Any CPU.Build.0 = Release|Any CPU
+		{255EF27C-2A6A-1AA6-25AB-549485F5667D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{255EF27C-2A6A-1AA6-25AB-549485F5667D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{255EF27C-2A6A-1AA6-25AB-549485F5667D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{255EF27C-2A6A-1AA6-25AB-549485F5667D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C496D5E9-24F8-38A2-0ED0-333C67914608}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C496D5E9-24F8-38A2-0ED0-333C67914608}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C496D5E9-24F8-38A2-0ED0-333C67914608}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C496D5E9-24F8-38A2-0ED0-333C67914608}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
