@@ -11,6 +11,8 @@ public class NGUIPanelFade : MonoBehaviour {
     public bool Widget = false;
     // If checked this will fade the UIPanel or UIWidget in when the game starts.
     public bool OnStart = false;
+    // If checked this will fade the UIPanel or UIWidget in when the gameobject is enabled.
+    public bool OnEnabled = false;
 
     void Start()
     {
@@ -23,6 +25,17 @@ public class NGUIPanelFade : MonoBehaviour {
             FadeIn();
         }
             
+    }
+    void OnEnable()
+    {
+        if (OnEnabled == true)
+        {
+            if (Widget == true)
+                GetComponent<UIWidget>().alpha = 0.0f;
+            else
+                GetComponent<UIPanel>().alpha = 0.0f;
+            FadeIn();
+        }
     }
     public void FadeIn()
     {
