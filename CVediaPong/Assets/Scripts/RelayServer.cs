@@ -7,79 +7,28 @@ using System.Threading;
 using System.Collections;
 using System.Collections.Generic;
 
-// State object for reading client data asynchronously  
-public class AsyncObject
-{
-    // Client  socket.  
-    public Socket workSocket = null;
-    // Size of receive buffer.  
-    public const int BufferSize = 1024;
-    // Receive buffer.  
-    public byte[] buffer = new byte[BufferSize];
-    // Received data string.  
-    public string sb = string.Empty;
-}
-
-// Just a couple functions to speed up and optimize the server code
-public static class Helpers
-{
-    // Shifts a byte array down and resets and remaining bytes by a index
-    public static void ShiftRemove(this byte[] lst, int shifts)
-    {
-        Array.Clear(lst, 0, shifts);
-        for (int i = shifts; i < lst.Length; i++)
-        {
-            lst[i - shifts] = lst[i];
-        }
-
-        for (int i = lst.Length - shifts; i < lst.Length; i++)
-        {
-            lst[i] = default(byte);
-        }
-    }
-
-    // Cuts a string based off of the indexs
-    public static string Slice(this string source, int start, int end)
-    {
-        if (end < 0) // Keep this for negative end support
-        {
-            end = source.Length + end;
-        }
-        int len = end - start;               // Calculate length
-        return source.Substring(start, len); // Return Substring of length
-    }
-
-    // Get bytes is basically Encoding.ASCII.GetBytes but faster because it uses the same byte array and avoid memory issues
-    // on large servers that use bytes over around 2048
-    public static byte[] GetBytes(this string source, byte[] bytes)
-    {
-        Array.Clear(bytes, 0, bytes.Length);
-        for (int i = 0; i < source.Length; i++)
-        {
-            if (source[i] <= 0x7f)
-            {
-                bytes[i] = (byte)source[i];
-            }
-            else
-            {
-                // Verify the fallback character for non-ASCII chars
-                bytes[i] = (byte)'?';
-            }
-        }
-        return bytes;
-    }
-}
-
-// A Asynchronous Relay Server the server is asynchronous so the
-// server is non-blocking and it doesnt require threads and is faster.
+// A Relay Server that handles the network communication
+// The server is non-blocking and and runs on a background thread.
 public class RelayServer : MonoBehaviour {
 
     // The server socket
     public Socket listener;
     public bool ClientConnected = false;
     public Socket client;
+    // Incoming data from client
+    public string data = null;
+    byte[] bytes = new Byte[1024];
     // The ping pong manager which we get the positions of the paddles and ball
     public PingPongManager PPM;
+    // Label of the host button
+    public UILabel HostLabel;
+    public UIPanel GameUIPanel;
+    public UIPanel MenuUI;
+    // Main server background thread
+    public Thread ServerThread;
+    // The actions from the background thread
+    public List<Action> Actions = new List<Action>();
+    public bool GameStarted = false;
 
     // Starts the main server
     public void StartServer()
@@ -94,83 +43,88 @@ public class RelayServer : MonoBehaviour {
         listener.Bind(localEndPoint);
         listener.Listen(100);
 
-        // Start an asynchronous socket to listen for connections.  
-        listener.BeginAccept(new AsyncCallback(AcceptCallback), listener);
-        UnityEngine.Debug.Log("Server started...");
+        // The background server thread that will process all of the client messages
+        ServerThread = new Thread(() => ServerLoop());
+        ServerThread.IsBackground = true;
+        ServerThread.Start();
+
+        HostLabel.text = "Waiting for client...";
+
     }
-    // Async Server callback
-    public void AcceptCallback(IAsyncResult ar)
+    public void Update()
     {
-        // Get the socket that handles the client request.  
-        Socket listener = (Socket)ar.AsyncState;
-        Socket handler = listener.EndAccept(ar);
-
-        if (client == null)
-            handler = client;
-
-        // Create the state object.  
-        AsyncObject state = new AsyncObject();
-        state.workSocket = handler;
-        handler.BeginReceive(state.buffer, 0, AsyncObject.BufferSize, 0,new AsyncCallback(ReceiveCallback), state);
+        // Since unity isnt threadsafe this invokes the functions
+        // called from the background thread and runs them on the main thread
+        if (Actions.Count > 1000)
+            Actions.Clear();
+        for (int x = 0; Actions.Count > x; x++)
+        {
+            Actions[x].Invoke();
+        }
+        // If game started send the position of the ping pong ball and our server paddle
+        if (GameStarted == true)
+        {
+            Vector3 bp = PPM.Ball.transform.position;
+            Vector3 pd = PPM.Paddle1.transform.position;
+            client.Send(Encoding.ASCII.GetBytes(bp.x.ToString() + "|" + bp.y.ToString() + "|" + bp.z.ToString() + "|;BALL"));
+            client.Send(Encoding.ASCII.GetBytes(pd.x.ToString() + "|" + pd.y.ToString() + "|" + pd.z.ToString() + "|;PADDLE"));
+        }
     }
-    public void ReceiveCallback(IAsyncResult AR)
+    public void ServerLoop()
     {
+        Debug.Log("Waiting for a connection...");
+        // Thread is suspended while waiting for an incoming connection.  
+        Socket handler = listener.Accept();
+        client = handler;
 
-        // Retrieve the state object and the handler socket  
-        // from the asynchronous state object.  
-        AsyncObject state = (AsyncObject)AR.AsyncState;
-        Socket current = state.workSocket;
-        int received;
+        Actions.Add(delegate ()
+        {
+            HostLabel.text = "Client joined!";
+        });
 
-        try
-        {
-            received = current.EndReceive(AR);
-        }
-        catch (Exception ex)
-        {
-            // Don't shutdown because the socket may be disposed and its disconnected anyway.
-            return;
-        }
+        Debug.Log("connected!!!");
 
-        state.sb += (Encoding.ASCII.GetString(state.buffer, 0, received));
-        state.sb = state.sb.Replace("\0", string.Empty);
-        string text = state.sb;
-        int endindex = text.IndexOf('^');
+        while (true)
+        {
 
-        // Not all data has been recived
-        if (endindex == -1)
-        {
-            current.BeginReceive(state.buffer, 0, AsyncObject.BufferSize, SocketFlags.None, ReceiveCallback, state);
-            return;
-        }
-        // Enough data has been recived for it to be a message
-        else
-        {
-            string segment = text.Slice(0, endindex);
-            string[] datarecieved = segment.Split(';');
-            state.sb = state.sb.Remove(0, endindex + 1);
-            state.buffer.ShiftRemove(endindex + 1);
+            bytes = new byte[1024];
+            int bytesRec = handler.Receive(bytes);
+            string message = Encoding.ASCII.GetString(bytes, 0, bytesRec);
+            string[] datarecieved = message.Split(';');
+
+            Debug.Log(message);
+
+            // START = message to start the ping pong game
+            // PADDLE = the position of the oppisite paddle
 
             if (datarecieved.Length > 1 && datarecieved[1] == "START")
             {
-                ClientConnected = true;
-                goto EndOfRead;
+                Actions.Add(delegate ()
+                {
+                    MenuUI.gameObject.SetActive(false);
+                    GameUIPanel.gameObject.SetActive(true);
+                    client.Send(Encoding.ASCII.GetBytes(";START"));
+                    GameStarted = true;
+                });
+            }
+            if (datarecieved.Length > 1 && datarecieved[1] == "PADDLE")
+            {
+                Actions.Add(delegate ()
+                {
+                    string[] posdata = datarecieved[0].Split('|');
+                    PPM.Paddle2.transform.position = Vector3.Lerp(PPM.Paddle2.transform.position, new Vector3(float.Parse(posdata[0]), float.Parse(posdata[1]), float.Parse(posdata[2])), 6 * Time.deltaTime);
+                });
             }
         }
 
-        EndOfRead:
 
-        try
-        {
-            state.workSocket.BeginReceive(state.buffer, 0, AsyncObject.BufferSize, SocketFlags.None, ReceiveCallback, state);
-        }
-        catch (ObjectDisposedException e)
-        {
-            //Form1.Self.AddToLog("Client forcefully disconnected");
-            // Don't shutdown because the socket may be disposed and its disconnected anyway.
-            state.workSocket.Close();
-        }
-
+    }
+    public void OnApplicationQuit()
+    {
+        // Make sure the thread is stopped before unity quits or in the editor unity can keep the
+        // thread running and cause problems.
+        ServerThread.Abort();
+        ServerThread = null;
     }
 
 }

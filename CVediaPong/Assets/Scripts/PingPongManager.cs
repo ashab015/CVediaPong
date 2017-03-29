@@ -21,12 +21,15 @@ public class PingPongManager : MonoBehaviour {
     public GameObject Paddle1;
     public GameObject Paddle2;
     public GameObject Ball;
+    // Mode of the game -1 = Offline, 1 = Client, 2 = Server
+    public int GameMode = -1;
 
     void Start()
     {
         
         // Apply a random velocity to the ball at start so the ball flys in a random direction.
-        Ball.GetComponent<Rigidbody>().velocity = RandomVector3(VelocityMultiplier);
+        if (GameMode != 1)
+            Ball.GetComponent<Rigidbody>().velocity = RandomVector3(VelocityMultiplier);
 
     }
 
@@ -37,15 +40,40 @@ public class PingPongManager : MonoBehaviour {
         // Handles the arrow key paddle movement
         if (Input.GetKey(KeyCode.LeftArrow))
         {
-            Paddle1.GetComponent<Rigidbody>().velocity += new Vector3(-1, 0, 0) * PaddleMovementSpeed;
+            // If the gamemode is 1 then this is the client player then switch the paddles
+            if (GameMode != 1)
+            {
+                Paddle1.GetComponent<Rigidbody>().velocity += new Vector3(-1, 0, 0) * PaddleMovementSpeed;
+            }
+            else
+            {
+                Paddle2.GetComponent<Rigidbody>().velocity += new Vector3(-1, 0, 0) * PaddleMovementSpeed;
+            }
         }
         else if (Input.GetKey(KeyCode.RightArrow))
         {
-            Paddle1.GetComponent<Rigidbody>().velocity += new Vector3(1, 0, 0) * PaddleMovementSpeed;
+            // If the gamemode is 1 then this is the client player then switch the paddles
+            if (GameMode != 1)
+            {
+                Paddle1.GetComponent<Rigidbody>().velocity += new Vector3(1, 0, 0) * PaddleMovementSpeed;
+            }
+            else
+            {
+                // Create a rigidbody on paddle 2
+                if (Paddle2.GetComponent<Rigidbody>() == null)
+                {
+                    Rigidbody rb = Paddle2.AddComponent<Rigidbody>();
+                    rb.drag = 6;
+                    rb.useGravity = false;
+                    rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+                    rb.freezeRotation = true;
+                }
+                Paddle2.GetComponent<Rigidbody>().velocity += new Vector3(1, 0, 0) * PaddleMovementSpeed;
+            }            
         }
 
         // If the PlayAgainstComputer is checked the computer just lerp the x position
-        if (PlayAgainstComputer == true)
+        if (PlayAgainstComputer == true && GameMode != 1)
         {
             // If the ball is past 0.0f on the on Y axis that means its getting close to hitting the computers side.
             if (Ball.transform.position.y > 0.0f)
