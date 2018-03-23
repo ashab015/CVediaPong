@@ -1,7 +1,7 @@
-# CVedia Pong
+## CVedia Pong (C# Unity Project)
 
-A project demonstrating my current Unity 3D capabilities and programming abilities. 
-I decided to create the example with a only 1 asset for UI (NGUI) to show I have a deep understanding of networking and C#.
+A project testing the Unity3D capabilities with basic networking. 
+I decided to create the example with a only 1 asset for UI (NGUI) to test networking and C#.
 The Pong game can be customized remotely, Before the game starts the game downloads assets that are hosted online.
 
 ## Built With
