@@ -2,21 +2,28 @@
 using System.Collections;
 using System.Collections.Generic;
 
-// Loads a texture from a asset bundle from the specified url
+/// <summary> Loads a texture from a asset bundle from the specified url. </summary>
 public class AssetBundleDownloader : MonoBehaviour {
 
+    /// <summary> True to done. </summary>
     public bool Done = false;
+    /// <summary> The texture background. </summary>
     public UITexture TextureBackground;
+    /// <summary> URL of the document. </summary>
     public string URL;
 
-    // Load the texture when the game starts
+    /// <summary> Load the texture when the game starts. </summary>
     private void Start()
     {
         StartCoroutine(StartDownload());
     }
 
-    // Uses WWW and the load asset functions to download the asset and extract the texture and apply it
-    // to the UITexture
+    /// <summary>
+    /// Uses WWW and the load asset functions to download the asset and extract the texture and apply it
+    /// to the UITexture.
+    /// </summary>
+    ///
+    /// <returns> An IEnumerator. </returns>
     IEnumerator StartDownload()
     {
         while (!Caching.ready)

@@ -2,18 +2,21 @@
 using System.Collections;
 
 
-// This class allows for NGUI Widget and UIPanel fading via the widget / panel alpha values.
+/// <summary> This class allows for NGUI Widget and UIPanel fading via the widget / panel alpha values. </summary>
 public class NGUIPanelFade : MonoBehaviour {
 
-    // How the UI Element fade in and out
+    /// <summary> How the UI Element fade in and out. </summary>
     public float FadeSpeed;
+    /// <summary> True if this object is fading. </summary>
     private bool IsFading = false;
+    /// <summary> True to widget. </summary>
     public bool Widget = false;
-    // If checked this will fade the UIPanel or UIWidget in when the game starts.
+    /// <summary> If checked this will fade the UIPanel or UIWidget in when the game starts. </summary>
     public bool OnStart = false;
-    // If checked this will fade the UIPanel or UIWidget in when the gameobject is enabled.
+    /// <summary> If checked this will fade the UIPanel or UIWidget in when the gameobject is enabled. </summary>
     public bool OnEnabled = false;
 
+    /// <summary> Starts this object. </summary>
     void Start()
     {
         if (OnStart == true)
@@ -26,6 +29,7 @@ public class NGUIPanelFade : MonoBehaviour {
         }
             
     }
+    /// <summary> Executes the enable action. </summary>
     void OnEnable()
     {
         if (OnEnabled == true)
@@ -37,6 +41,7 @@ public class NGUIPanelFade : MonoBehaviour {
             FadeIn();
         }
     }
+    /// <summary> Fade in. </summary>
     public void FadeIn()
     {
         if (Widget == false)
@@ -45,6 +50,7 @@ public class NGUIPanelFade : MonoBehaviour {
             StartCoroutine(FadeInE2());
     }
 
+    /// <summary> Fade out. </summary>
     public void FadeOut()
     {
         if (Widget == false)
@@ -53,7 +59,9 @@ public class NGUIPanelFade : MonoBehaviour {
             StartCoroutine(FadeOutE2());
     }
 
-    // Diffrent fade in and fade out ienumerator functions
+    /// <summary> Diffrent fade in and fade out ienumerator functions. </summary>
+    ///
+    /// <returns> An IEnumerator. </returns>
     private IEnumerator FadeInE()
     {
 
@@ -81,6 +89,9 @@ public class NGUIPanelFade : MonoBehaviour {
         }
 
     }
+    /// <summary> Fade out e. </summary>
+    ///
+    /// <returns> An IEnumerator. </returns>
     private IEnumerator FadeOutE()
     {
 
@@ -108,6 +119,9 @@ public class NGUIPanelFade : MonoBehaviour {
         }
 
     }
+    /// <summary> Fade in e 2. </summary>
+    ///
+    /// <returns> An IEnumerator. </returns>
     private IEnumerator FadeInE2()
     {
 
@@ -135,6 +149,9 @@ public class NGUIPanelFade : MonoBehaviour {
         }
 
     }
+    /// <summary> Fade out e 2. </summary>
+    ///
+    /// <returns> An IEnumerator. </returns>
     private IEnumerator FadeOutE2()
     {
 
@@ -163,11 +180,18 @@ public class NGUIPanelFade : MonoBehaviour {
 
     }
 
-    // This functions let the UI Element fade in then wait for a specified seconds then fade out
+    /// <summary> This functions let the UI Element fade in then wait for a specified seconds then fade out. </summary>
+    ///
+    /// <param name="seconds">  The seconds. </param>
     public void FadeInWaitFadeOut(float seconds)
     {
         StartCoroutine(FadeInWaitFadeOutE(seconds));
     }
+    /// <summary> Fade in wait fade out e. </summary>
+    ///
+    /// <param name="seconds">  The seconds. </param>
+    ///
+    /// <returns> An IEnumerator. </returns>
     private IEnumerator FadeInWaitFadeOutE(float seconds)
     {
 

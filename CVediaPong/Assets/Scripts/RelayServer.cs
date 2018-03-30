@@ -7,30 +7,38 @@ using System.Threading;
 using System.Collections;
 using System.Collections.Generic;
 
-// A Relay Server that handles the network communication
-// The server is non-blocking and and runs on a background thread.
+/// <summary>
+/// A Relay Server that handles the network communication
+/// The server is non-blocking and and runs on a background thread.
+/// </summary>
 public class RelayServer : MonoBehaviour {
 
-    // The server socket
+    /// <summary> The server socket. </summary>
     public Socket listener;
+    /// <summary> True if client connected. </summary>
     public bool ClientConnected = false;
+    /// <summary> The client. </summary>
     public Socket client;
-    // Incoming data from client
+    /// <summary> Incoming data from client. </summary>
     public string data = null;
+    /// <summary> The bytes. </summary>
     byte[] bytes = new Byte[1024];
-    // The ping pong manager which we get the positions of the paddles and ball
+    /// <summary> The ping pong manager which we get the positions of the paddles and ball. </summary>
     public PingPongManager PPM;
-    // Label of the host button
+    /// <summary> Label of the host button. </summary>
     public UILabel HostLabel;
+    /// <summary> The game user interface panel. </summary>
     public UIPanel GameUIPanel;
+    /// <summary> The menu user interface. </summary>
     public UIPanel MenuUI;
-    // Main server background thread
+    /// <summary> Main server background thread. </summary>
     public Thread ServerThread;
-    // The actions from the background thread
+    /// <summary> The actions from the background thread. </summary>
     public List<Action> Actions = new List<Action>();
+    /// <summary> True if game started. </summary>
     public bool GameStarted = false;
 
-    // Starts the main server
+    /// <summary> Starts the main server. </summary>
     public void StartServer()
     {
         // Data buffer for incoming data.  
@@ -51,6 +59,7 @@ public class RelayServer : MonoBehaviour {
         HostLabel.text = "Waiting for client...";
 
     }
+    /// <summary> Updates this object. </summary>
     public void Update()
     {
         // Since unity isnt threadsafe this invokes the functions
@@ -70,6 +79,7 @@ public class RelayServer : MonoBehaviour {
             client.Send(Encoding.ASCII.GetBytes(pd.x.ToString() + "|" + pd.y.ToString() + "|" + pd.z.ToString() + "|;PADDLE"));
         }
     }
+    /// <summary> Server loop. </summary>
     public void ServerLoop()
     {
         Debug.Log("Waiting for a connection...");
@@ -119,6 +129,7 @@ public class RelayServer : MonoBehaviour {
 
 
     }
+    /// <summary> Executes the application quit action. </summary>
     public void OnApplicationQuit()
     {
         // Make sure the thread is stopped before unity quits or in the editor unity can keep the

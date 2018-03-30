@@ -1,16 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-// A modular class meant to able to be thown on any object with a collider and
-// trigger events on the collision.
+/// <summary>
+/// A modular class meant to able to be thown on any object with a collider and
+/// trigger events on the collision.
+/// </summary>
 public class ModularCollisionEvent : MonoBehaviour {
 
-    // The Event to be triggered
+    /// <summary> The Event to be triggered. </summary>
     public EventDelegate Event;
-    // GameObject To Expect the collision with.
+    /// <summary> GameObject To Expect the collision with. </summary>
     public GameObject ExpectedCollisionObject;
 
-    // This event calls when this gameobject collides with the expected rigidbody then calls the EventDelegate
+    /// <summary> This event calls when this gameobject collides with the expected rigidbody then calls the EventDelegate. </summary>
+    ///
+    /// <param name="col">  The col. </param>
     void OnCollisionEnter(Collision col)
     {
         if (ExpectedCollisionObject == null)

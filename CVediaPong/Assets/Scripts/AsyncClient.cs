@@ -8,26 +8,35 @@ using System.Collections;
 using System.Collections.Generic;
 
 
-// A Client that handles the network communication
-// The client is non-blocking and and runs on a background thread.
+/// <summary>
+/// A Client that handles the network communication
+/// The client is non-blocking and and runs on a background thread.
+/// </summary>
 public class AsyncClient : MonoBehaviour {
 
 
+    /// <summary> True if connected. </summary>
     public bool Connected = false;
+    /// <summary> The client. </summary>
     Socket client;
+    /// <summary> The join label. </summary>
     public UILabel JoinLabel;
+    /// <summary> The menu user interface panel. </summary>
     public GameObject MenuUIPanel;
+    /// <summary> The pin ball user interface panel. </summary>
     public GameObject PinBallUIPanel;
-    // The ping pong manager which we set the positions of the paddles and ball
+    /// <summary> The ping pong manager which we set the positions of the paddles and ball. </summary>
     public PingPongManager PPM;
-    // The actions from the background thread
+    /// <summary> The actions from the background thread. </summary>
     public List<Action> Actions = new List<Action>();
-    // Main client background thread
+    /// <summary> Main client background thread. </summary>
     public Thread ClientThread;
-    // Data buffer for incoming data.  
+    /// <summary> Data buffer for incoming data. </summary>
     byte[] bytes = new byte[1024];
+    /// <summary> True to game running. </summary>
     public bool GameRunning = false;
 
+    /// <summary> Updates this object. </summary>
     public void Update()
     {
 
@@ -47,6 +56,7 @@ public class AsyncClient : MonoBehaviour {
         }
 
     }
+    /// <summary> Starts a client. </summary>
     public void StartClient()
     {
 
@@ -78,6 +88,7 @@ public class AsyncClient : MonoBehaviour {
         JoinLabel.text = "Start the game";
 
     }
+    /// <summary> Client loop. </summary>
     public void ClientLoop()
     {
         try
@@ -125,6 +136,7 @@ public class AsyncClient : MonoBehaviour {
         }
         
     }
+    /// <summary> Executes the application quit action. </summary>
     public void OnApplicationQuit()
     {
         // Make sure the thread is stopped before unity quits or in the editor unity can keep the

@@ -2,28 +2,38 @@
 using System.Collections;
 using System.Collections.Generic;
 
-// This class is going to manage all the behavior of the actual pong ball movement
-// like bouncing against the walls and the paddles of the wall / other player.
+/// <summary>
+/// This class is going to manage all the behavior of the actual pong ball movement
+/// like bouncing against the walls and the paddles of the wall / other player.
+/// </summary>
 public class PingPongManager : MonoBehaviour {
 
-    // If checked the other players paddle will be controlled by the computer
+    /// <summary> If checked the other players paddle will be controlled by the computer. </summary>
     public bool PlayAgainstComputer = false;
-    // Speed of the computer paddle
+    /// <summary> Speed of the computer paddle. </summary>
     public float ComputerMovementSpeed = 2.0f;
-    // Movement of the paddle when the player pressed the right or left key.
+    /// <summary> Movement of the paddle when the player pressed the right or left key. </summary>
     public float PaddleMovementSpeed = 1.0f;
-    // Velocity of the ball when you give the initial random vector velocity.
+    /// <summary> Velocity of the ball when you give the initial random vector velocity. </summary>
     public float VelocityMultiplier = 1.0f;
+    /// <summary> The score counter. </summary>
     public UILabel ScoreCounter;
+    /// <summary> The score. </summary>
     private int Score = 0;
+    /// <summary> The window loose widget. </summary>
     public NGUIPanelFade WinLooseWidget;
+    /// <summary> Message describing the window loose. </summary>
     public UILabel WinLooseMessage;
+    /// <summary> The first paddle. </summary>
     public GameObject Paddle1;
+    /// <summary> The second paddle. </summary>
     public GameObject Paddle2;
+    /// <summary> The ball. </summary>
     public GameObject Ball;
-    // Mode of the game -1 = Offline, 1 = Client, 2 = Server
+    /// <summary> Mode of the game -1 = Offline, 1 = Client, 2 = Server. </summary>
     public int GameMode = -1;
 
+    /// <summary> Starts this object. </summary>
     void Start()
     {
         
@@ -35,7 +45,7 @@ public class PingPongManager : MonoBehaviour {
 
     }
 
-    // Handles the player paddle movement by the Left and Right Arrow keys.
+    /// <summary> Handles the player paddle movement by the Left and Right Arrow keys. </summary>
     void Update ()
     {
 	
@@ -99,13 +109,24 @@ public class PingPongManager : MonoBehaviour {
         }          
     }
 
-    // Creates a random vector that can be scaled by the multiplied value.
-    // Using Unity's default Random class generates zeros sometimes so were goint to use the System.Random
+    /// <summary>
+    /// Creates a random vector that can be scaled by the multiplied value.
+    /// Using Unity's default Random class generates zeros sometimes so were goint to use the System.Random.
+    /// </summary>
+    ///
+    /// <param name="Multiplier">   The multiplier. </param>
+    ///
+    /// <returns> A Vector3. </returns>
     Vector3 RandomVector3(float Multiplier)
     {
         return new Vector3(GetRandomNumber(-1f, 1f) * Multiplier, GetRandomNumber(-1, 1) * Multiplier, GetRandomNumber(-1, 1) * Multiplier);
     }
-    // Since System.Random doesn't have the actual random inbetween float we inplement on ourself.
+    /// <summary> Since System.Random doesn't have the actual random inbetween float we inplement on ourself. </summary>
+    ///
+    /// <param name="minimum">  The minimum. </param>
+    /// <param name="maximum">  The maximum. </param>
+    ///
+    /// <returns> The random number. </returns>
     public float GetRandomNumber(double minimum, double maximum)
     {
         System.Random random = new System.Random();
@@ -113,16 +134,20 @@ public class PingPongManager : MonoBehaviour {
     }
 
 
-    // If a collision between the paddle and the ball happens step the score of the player up one.
-    // This function is called by the ModularCollsionEvent component on the ball gameobject.
+    /// <summary>
+    /// If a collision between the paddle and the ball happens step the score of the player up one.
+    /// This function is called by the ModularCollsionEvent component on the ball gameobject.
+    /// </summary>
     public void PingPongPaddleCollision()
     {
         Score += 1;
         ScoreCounter.text = "Score: " + Score.ToString();
     }
 
-    // If the player fails to block the ping pong ball 
-    // we set the UILabel and then fade in the UI element.
+    /// <summary>
+    /// If the player fails to block the ping pong ball
+    /// we set the UILabel and then fade in the UI element.
+    /// </summary>
     public void PlayerLoose()
     {
         WinLooseWidget.FadeIn();
@@ -130,6 +155,7 @@ public class PingPongManager : MonoBehaviour {
         // Stop the ball
         Ball.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
     }
+    /// <summary> Player window. </summary>
     public void PlayerWin()
     {
         WinLooseWidget.FadeIn();
